@@ -17,8 +17,8 @@ function App() {
  <div className="relative">
 <Topbar/>
 <Routes>
-  <Route path='/' element={<TaskOne/>}/>
-  <Route path='/box2' element={<TaskTwo/>}/>
+  <Route path='/' element={<TaskTwo/>}/>
+  {/* <Route path='/box2' element={<TaskTwo/>}/> */}
   <Route path='/box3' element={<TaskThree/>}/>
   <Route path='/box4' element={<TaskFour/>}/>
   <Route path='/box5' element={<TaskFive/>}/>

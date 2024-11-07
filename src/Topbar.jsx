@@ -13,13 +13,13 @@ const Topbar = () => {
           <Link to="/">one</Link>
           </span>
         </button>
-        <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
+        {/* <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
           <span  className="relative flex items-center text-white font-bold
      max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
 
           <Link to="/box2">Two</Link>
           </span>
-        </button>
+        </button> */}
         <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 mx-3 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
           <span  className="relative flex items-center text-white font-bold
      max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
