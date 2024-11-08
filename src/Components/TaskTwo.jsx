@@ -1,3 +1,4 @@
+
 import {
   Decal,
   Environment,
@@ -6,12 +7,14 @@ import {
   Text,
 } from "@react-three/drei";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, Suspense } from "react";
 import { useSpring } from "@react-spring/three";
 import { TextureLoader, CanvasTexture, LinearFilter } from "three";
 import * as THREE from "three";
 
 import { Leva, useControls } from "leva";
+import Loader from "./TaskSix/Loader";
+import { Sphere } from "./Sphere";
 
 const degToRad = (degrees) => degrees * (Math.PI / 180);
 
@@ -249,7 +252,7 @@ const GGG = () => {
   const [buttonText, setButtonText] = useState("Click Me");
   const [heading, setHeading] = useState("Global Text");
   const [text, setText] = useState(
-    "TLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspicia Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure.a soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure"
+    "  Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit  perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum  Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspicia Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure.a soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. dolor sit amet consectetur adipisicing elit. Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure"
   );
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
@@ -259,6 +262,8 @@ const GGG = () => {
   const [isLimitedZoom, setIsLimitedZoom] = useState(false);
   const currentDistanceRef = useRef(3);
   const initialDistance = 3;
+  const [model,setModel] = useState(false)
+  const [join,setJoin] = useState(false)
   // Leva controls
   const {
     Rotate_X,
@@ -271,6 +276,8 @@ const GGG = () => {
     Zoom_Lock,
     Show_Environment,
     Limited_Zoom,
+    Show_Model, // New toggle control for model
+    Join_Model,
     // Text_Input, // Added control for text input
   } = useControls({
     Rotate_X: {
@@ -323,6 +330,15 @@ const GGG = () => {
       value: text,
       label: "Edit Text",
       onChange: (value) => setText(value),
+    }, Show_Model: { // Add model control
+      value: true,
+      label: "Show Model",
+      onChange: (value) => setModel(value),
+    },
+   Join_Model: { // Add model control
+      value: false,
+      label: "Join Model",
+      onChange: (value) => setJoin(value),
     },
   });
 
@@ -340,10 +356,14 @@ const GGG = () => {
     };
   }, []);
 
+  
+
   return (
     <div className="h-screen w-screen relative">
       
       <Leva />
+      <Suspense fallback={<Loader/>}>
+
       <Canvas
         gl={{ antialias: true }}
         camera={{ position: [0, 0, 10], fov: 40, near: 0.1, far: 1000 }}
@@ -359,21 +379,68 @@ const GGG = () => {
           currentDistanceRef={currentDistanceRef}
           initialDistance={initialDistance}
           zoomLocked={zoomLocked}
-        />
-        <BoxGeometry
-          text={text} // Use the edited text from Leva
-          heading={heading}
-          buttonText={buttonText}
-          headingColor={Heading_Color} // use dynamic values
-          buttonColor={Button_Color} // use dynamic values
-          textColor={Text_Color} // use dynamic values
-          color={Object_Color} // use dynamic values
-          position={[0, 0, 0]}
-          rotateX={rotateX}
-          rotateY={rotateY}
-          mobile={mobile}
-        />
+          />
+         {join ? (
+            <>
+              <BoxGeometry
+                text={text}
+                heading={heading}
+                buttonText={buttonText}
+                headingColor={Heading_Color}
+                buttonColor={Button_Color}
+                textColor={Text_Color}
+                color={Object_Color}
+                position={[0, 0, 0]}
+                rotateX={rotateX}
+                rotateY={rotateY}
+                mobile={mobile}
+              />
+              <Sphere
+                text={text}
+                headingColor={Heading_Color}
+                buttonColor={Button_Color}
+                createTextTexture={createTextTexture}
+                heading={heading}
+                textColor={Text_Color}
+                position={[0, 0.1, 0]}
+                rotateX={rotateX}
+                rotateY={rotateY}
+                mobile={mobile}
+              />
+            </>
+          ) : model ? (
+            <BoxGeometry
+              text={text}
+              heading={heading}
+              buttonText={buttonText}
+              headingColor={Heading_Color}
+              buttonColor={Button_Color}
+              textColor={Text_Color}
+              color={Object_Color}
+              position={[0, 0, 0]}
+              rotateX={rotateX}
+              rotateY={rotateY}
+              mobile={mobile}
+            />
+          ) : (
+            <Sphere
+              text={text}
+              headingColor={Heading_Color}
+              buttonColor={Button_Color}
+              createTextTexture={createTextTexture}
+              heading={heading}
+              textColor={Text_Color}
+              position={[0, 0.1, 0]}
+              rotateX={rotateX}
+              rotateY={rotateY}
+              mobile={mobile}
+            />
+          )}
+       
+       
+         
       </Canvas>
+          </Suspense>
     </div>
   );
 };

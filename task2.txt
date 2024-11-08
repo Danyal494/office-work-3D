@@ -1,3 +1,537 @@
+----------------------------------current task------------------------------------
+import {
+  Decal,
+  Environment,
+  Html,
+  OrbitControls,
+  Text,
+} from "@react-three/drei";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
+import React, { useState, useEffect, useRef, useMemo, Suspense } from "react";
+import { useSpring } from "@react-spring/three";
+import { TextureLoader, CanvasTexture, LinearFilter } from "three";
+import * as THREE from "three";
+
+import { Leva, useControls } from "leva";
+import Loader from "./TaskSix/Loader";
+import { Sphere } from "./Sphere";
+
+const degToRad = (degrees) => degrees * (Math.PI / 180);
+
+const createTextTexture = (
+  text,
+  heading,
+  buttonText,
+  headingColor,
+  textColor,
+  buttonColor
+) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = 4300; // Adjust this to control the resolution
+  canvas.height = 2080; // Adjust this to control the resolution
+  const context = canvas.getContext("2d");
+
+  // Background
+  context.fillStyle = "white";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Heading
+  context.font = "bold 150px Arial";
+  context.fillStyle = headingColor;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.lineJoin = "round";
+  context.miterLimit = 2;
+  context.fillText(heading, canvas.width / 2, 200);
+
+  // Button
+  const buttonWidth = 800; // Adjusted width
+  const buttonHeight = 200; // Adjusted height
+  const buttonX = canvas.width / 2 - buttonWidth / 2;
+  const buttonY = 400; // Adjusted y-position
+
+  context.fillStyle = buttonColor;
+  context.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+  context.font = "bold 80px Arial"; // Larger font size
+  context.fillStyle = textColor;
+  context.fillText(buttonText, canvas.width / 2, buttonY + buttonHeight / 2);
+
+  // Paragraph
+  context.font = "50px Arial"; // Larger font size
+  context.fillStyle = textColor;
+  context.textAlign = "center";
+
+  const words = text.split(" ");
+  let line = "";
+  let y = buttonY + buttonHeight + 100; // Adjusted y-position
+  // let x = buttonX + buttonHeight + 0; // Adjusted y-position
+  const lineHeight = 100; // Increased line height
+
+  words.forEach((word) => {
+    const testLine = `${line}${word} `;
+    const metrics = context.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > canvas.width - 40 && line !== "") {
+      context.fillText(line, canvas.width / 2, y);
+      line = `${word} `;
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  });
+  context.fillText(line, canvas.width / 2, y);
+
+  const texture = new CanvasTexture(canvas);
+  texture.anisotropy = 16; // Increase anisotropy for better quality at an angle
+  texture.minFilter = LinearFilter; // Use linear filter for smoother appearance
+  texture.magFilter = LinearFilter; // Use linear filter for smoother appearance
+  texture.generateMipmaps = false; // Disable mipmaps if text appears blurry
+
+  return texture;
+};
+
+const BoxGeometry = ({
+  text,
+  mobile,
+  heading,
+  buttonText,
+  headingColor,
+  buttonColor,
+  textColor = "black",
+  color = "orange",
+  position,
+  rotateX,
+  rotateY,
+}) => {
+  const texture = useMemo(() => {
+    return createTextTexture(
+      text,
+      heading,
+      buttonText,
+      headingColor,
+      textColor,
+      buttonColor
+    );
+  }, [text, heading, buttonText, headingColor, textColor, buttonColor]);
+
+  const SafariRef = useRef();
+
+  // const [safariHovered, setSafariHovered] = useState(false);
+  const [safariClicked, setSafariClicked] = useState(false);
+
+  const Safaritexture = useLoader(THREE.TextureLoader, "/images/safaris.png");
+
+  useFrame(() => {
+    const targetScales = {
+      Safari: safariClicked
+        ? new THREE.Vector3(1.2, 1.2, 1)
+        : new THREE.Vector3(1, 1, 1),
+    };
+
+    SafariRef.current.scale.lerp(targetScales.Safari, 0.1);
+  });
+
+  useEffect(() => {
+    const timeoutDuration = 1 * 1000; // 2 minutes in milliseconds
+
+    // Set timeout for photoClicked
+    if (safariClicked) {
+      const timer = setTimeout(() => {
+        setSafariClicked(false);
+      }, timeoutDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [safariClicked]);
+
+  return (
+    <mesh
+      position={position}
+      rotation={[rotateX, rotateY, 0]}
+      scale={mobile ? 0.7 : 1}
+    >
+      <sphereGeometry args={[1, 63, 63]} />
+      <meshStandardMaterial
+        metalness={0}
+        roughness={0}
+        opacity={1}
+        color={color}
+        map={texture}
+      />
+
+      <Decal
+        depthWrite
+        polygonOffset
+        ref={SafariRef}
+        polygonOffsetFactor={-4}
+        // onPointerOver={() => setSafariHovered(true)}
+        // onPointerOut={() => setSafariHovered(false)}
+        onClick={() => setSafariClicked(true)}
+        position={[0, 0.601, 0.8]}
+        rotation={[0, 0, 0]}
+        scale={new THREE.Vector3(0.08, 0.08, 0.08)}
+        map={Safaritexture}
+      />
+    </mesh>
+  );
+};
+
+const CameraController = ({ cameraPosition }) => {
+  const { camera } = useThree();
+  const { position } = useSpring({ position: cameraPosition });
+
+  useEffect(() => {
+    camera.position.set(...position.get());
+    camera.updateProjectionMatrix();
+  }, [position, camera]);
+
+  return null;
+};
+
+const Controls = ({
+  isLimitedZoom,
+  currentDistanceRef,
+  initialDistance,
+  zoomLocked,
+}) => {
+  const controlsRef = useRef();
+  const { camera } = useThree();
+  const [initialPositionSet, setInitialPositionSet] = useState(false);
+  const zoomLimitsSetRef = useRef(false);
+
+  useEffect(() => {
+    if (!initialPositionSet) {
+      camera.position.set(0, 0, initialDistance);
+      setInitialPositionSet(true);
+    }
+  }, [camera, initialDistance, initialPositionSet]);
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enabled = !zoomLocked;
+      controlsRef.current.update();
+    }
+  }, [zoomLocked]);
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      const currentDistance = currentDistanceRef.current;
+
+      if (isLimitedZoom && !zoomLimitsSetRef.current) {
+        if (currentDistance <= 5) {
+          controlsRef.current.minDistance = currentDistance - 1;
+          controlsRef.current.maxDistance = currentDistance + 1.1;
+        } else {
+          controlsRef.current.minDistance = currentDistance - 5;
+          controlsRef.current.maxDistance = currentDistance + 5;
+        }
+        zoomLimitsSetRef.current = true;
+      } else if (!isLimitedZoom) {
+        controlsRef.current.minDistance = 2;
+        controlsRef.current.maxDistance = 45;
+        zoomLimitsSetRef.current = false;
+      }
+
+      controlsRef.current.update();
+    }
+  }, [isLimitedZoom]);
+
+  useFrame(() => {
+    if (controlsRef.current) {
+      const currentDistance = controlsRef.current.object.position.distanceTo(
+        controlsRef.current.target
+      );
+      currentDistanceRef.current = currentDistance;
+    }
+  });
+
+  return <OrbitControls ref={controlsRef} enableZoom />;
+};
+
+const CombinedController = ({ mode }) => {
+  const { camera } = useThree();
+  const meshRef = useRef();
+  const horizontalAngleRef = useRef(0);
+  const verticalAngleRef = useRef(0);
+  const scrollXRef = useRef(0);
+  const scrollYRef = useRef(0);
+  const [lastTouch, setLastTouch] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleScroll = (event) => {
+      if (mode === "camera") {
+        horizontalAngleRef.current += event.deltaX * 0.01;
+        verticalAngleRef.current += event.deltaY * 0.01;
+      } else if (mode === "object") {
+        scrollXRef.current += event.deltaX * 0.01;
+        scrollYRef.current += event.deltaY * 0.01;
+      }
+    };
+
+    const handleTouchStart = (event) => {
+      const touch = event.touches[0];
+      setLastTouch({ x: touch.clientX, y: touch.clientY });
+    };
+
+    const handleTouchMove = (event) => {
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - lastTouch.x;
+      const deltaY = touch.clientY - lastTouch.y;
+      if (mode === "camera") {
+        horizontalAngleRef.current += deltaX * 0.01;
+        verticalAngleRef.current += deltaY * 0.01;
+      } else if (mode === "object") {
+        scrollXRef.current += deltaX * 0.01;
+        scrollYRef.current += deltaY * 0.01;
+      }
+      setLastTouch({ x: touch.clientX, y: touch.clientY });
+    };
+
+    window.addEventListener("wheel", handleScroll, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [mode, lastTouch]);
+
+  useFrame(() => {
+    if (mode === "camera") {
+      camera.position.x = Math.cos(horizontalAngleRef.current) * 3;
+      camera.position.y = Math.sin(verticalAngleRef.current) * 3;
+      camera.lookAt(0, 0, 0);
+    } else if (mode === "object" && meshRef.current) {
+      meshRef.current.rotation.y = scrollXRef.current;
+      meshRef.current.rotation.x = scrollYRef.current;
+    }
+  });
+  return null
+};
+
+const GGG = () => {
+  const [cameraPosition, setCameraPosition] = useState([0, 0, 3]);
+  const [buttonText, setButtonText] = useState("Click Me");
+  const [heading, setHeading] = useState("Global Text");
+  const [text, setText] = useState(
+    "  Possimus aperiam hic sapiente, quam doloribus eos assumenda soluta iusto fugit perspiciatis quo, vitae vel sed. Harum eveniet sequi ut laudantium iure. Lorem ipsum itae vel sed. Harum eveniet sequi ut laudantium iure"
+  );
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [environmentActive, setEnvironmentActive] = useState(true);
+  const [mobile, setMobile] = useState(false);
+  const [zoomLocked, setZoomLocked] = useState(false);
+  const [isLimitedZoom, setIsLimitedZoom] = useState(false);
+  const currentDistanceRef = useRef(3);
+  const initialDistance = 3;
+  const [model, setModel] = useState(false);
+  const [join, setJoin] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+  const [scrollMode, setScrollMode] = useState("camera"); // "camera" or "object"
+  const sphereRef = useRef();
+  // Leva controls
+  const {
+    Rotate_X,
+    Rotate_Y,
+    Object_Color,
+    Text_Color,
+    Heading_Color,
+    Button_Color,
+    Scroll_Enabled,
+    Scroll_Mode,
+    Environment_Preset,
+    Zoom_Lock,
+    Show_Environment,
+    Limited_Zoom,
+    Show_Model, // New toggle control for model
+    Join_Model,
+    // Text_Input, // Added control for text input
+  } = useControls({
+    Rotate_X: {
+      value: 0,
+      min: -360,
+      max: 360,
+      step: 1,
+      onChange: (value) => setRotateX(degToRad(value)),
+    },
+    Rotate_Y: {
+      value: 0,
+      min: -360,
+      max: 360,
+      step: 1,
+      onChange: (value) => setRotateY(degToRad(value)),
+    },
+    Text_Color: { value: "#000000" },
+    Heading_Color: { value: "#000000" },
+    Button_Color: { value: "#ff0000" },
+    Object_Color: { value: "#754280" },
+    Environment_Preset: {
+      value: "lobby",
+      options: [
+        "apartment",
+        "city",
+        "dawn",
+        "forest",
+        "lobby",
+        "night",
+        "park",
+        "studio",
+        "sunset",
+        "warehouse",
+      ],
+    },
+    Zoom_Lock: {
+      value: false,
+      onChange: (value) => setZoomLocked(value),
+    },
+    Show_Environment: {
+      value: true,
+      label: "Show Environment",
+    },
+    Limited_Zoom: {
+      value: false,
+      label: "Limited Zoom",
+      onChange: (value) => setIsLimitedZoom(value),
+    },
+    Text_Input: {
+      value: text,
+      label: "Edit Text",
+      onChange: (value) => setText(value),
+    },
+    Show_Model: {
+      // Add model control
+      value: true,
+      label: "Show Model",
+      onChange: (value) => setModel(value),
+    },
+    Join_Model: {
+      // Add model control
+      value: false,
+      label: "Join Model",
+      onChange: (value) => setJoin(value),
+    },Scroll_Enabled: {
+      value: false,
+      label: "Enable Scroll",
+    },
+    Scroll_Mode: {
+      value: "camera",
+      options: ["camera", "object"],
+      label: "Scroll Mode",
+    },
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width:500px)");
+    setMobile(mediaQuery.matches);
+
+    const handleMediaQueryChange = (event) => {
+      setMobile(event.matches);
+    };
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
+  }, []);
+
+  return (
+    <div className="h-screen w-screen relative">
+      <Leva />
+      <Suspense fallback={<Loader />}>
+        <Canvas
+          gl={{ antialias: true }}
+          camera={{ position: [0, 0, 10], fov: 40, near: 0.1, far: 1000 }}
+        >
+          <ambientLight intensity={1.5} />
+          <CameraController cameraPosition={cameraPosition} />
+          {Show_Environment && Environment_Preset !== "none" && (
+            <Environment preset={Environment_Preset} background={false} />
+          )}
+          <color attach="background" args={["#64748b"]} />
+           <Controls
+            isLimitedZoom={isLimitedZoom}
+            currentDistanceRef={currentDistanceRef}
+            initialDistance={initialDistance}
+            zoomLocked={zoomLocked}
+          /> 
+ {Scroll_Enabled && <CombinedController mode={Scroll_Mode} />}
+
+
+          {join ? (
+            <>
+              <BoxGeometry
+                text={text}
+                ref={sphereRef}
+                heading={heading}
+                buttonText={buttonText}
+                headingColor={Heading_Color}
+                buttonColor={Button_Color}
+                textColor={Text_Color}
+                color={Object_Color}
+                position={[0, 0, 0]}
+                rotateX={rotateX}
+                rotateY={rotateY}
+                mobile={mobile}
+              />
+              <Sphere
+                text={text}
+                ref={sphereRef}
+                headingColor={Heading_Color}
+                buttonColor={Button_Color}
+                createTextTexture={createTextTexture}
+                heading={heading}
+                textColor={Text_Color}
+                position={[0, 0.1, 0]}
+                rotateX={rotateX}
+                rotateY={rotateY}
+                mobile={mobile}
+              />
+            </>
+          ) : model ? (
+            <BoxGeometry
+              text={text}
+              ref={sphereRef}
+              heading={heading}
+              buttonText={buttonText}
+              headingColor={Heading_Color}
+              buttonColor={Button_Color}
+              textColor={Text_Color}
+              color={Object_Color}
+              position={[0, 0, 0]}
+              rotateX={rotateX}
+              rotateY={rotateY}
+              mobile={mobile}
+            />
+          ) : (
+            <Sphere
+              text={text}
+              ref={sphereRef}
+              headingColor={Heading_Color}
+              buttonColor={Button_Color}
+              createTextTexture={createTextTexture}
+              heading={heading}
+              textColor={Text_Color}
+              position={[0, 0.1, 0]}
+              rotateX={rotateX}
+              rotateY={rotateY}
+              mobile={mobile}
+            />
+          )}
+        </Canvas>
+      </Suspense>
+    </div>
+  );
+};
+
+export default GGG;
+
+
+
+
+
+
+
 --------------------------------TaskOne-----------------------------------------------------
 import { Decal, Environment, Html, OrbitControls, Plane, Text } from '@react-three/drei';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
