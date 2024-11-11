@@ -91,7 +91,7 @@ const TaskThree = () => {
                 onClick={toggleMode}
                 style={{
                     position: 'absolute',
-                    top: '20px',
+                    top: '60px',
                     left: '20px',
                     padding: '10px',
                     zIndex: 100,

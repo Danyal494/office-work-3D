@@ -15,6 +15,7 @@ import * as THREE from "three";
 import { Leva, useControls } from "leva";
 import Loader from "./TaskSix/Loader";
 import { Sphere } from "./Sphere";
+import TransitionMaterial from "./TaskSix/MeshTransitionMaterial";
 
 const degToRad = (degrees) => degrees * (Math.PI / 180);
 
@@ -211,11 +212,12 @@ const BoxGeometry = ({
       scale={mobile ? 0.7 : 1}
     >
       <sphereGeometry args={[1, 63, 63]} />
-      <meshStandardMaterial
+      <TransitionMaterial
         metalness={0}
         roughness={0}
         opacity={1}
-        color={color}
+        transitionColor={color}
+        transitionTime={0.4}
         map={texture}
       />
 
