@@ -1,4 +1,4 @@
-import React, { Suspense} from 'react';
+import React, { Suspense, useEffect, useState} from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { Decal, Environment, OrbitControls } from '@react-three/drei';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
@@ -24,6 +24,8 @@ import rad from '/images/radios.png'
 import not from '/images/notes.png'
 import mail from '/images/mails.png'
 import * as THREE from 'three';
+import Loader from './TaskSix/Loader';
+import { Leva, useControls } from 'leva';
 // Remove the unused appleLogo if it's not needed
 // import appleLogo from '/apple.png';
 
@@ -38,12 +40,159 @@ const TaskFour = () => {
 //     return () => clearTimeout(timer);
 //   }, []);
 
+
+const [mrmode,setMrmode] = useState(false)
+const{
+  Mobile_RMode,
+} = useControls( {Mobile_RMode: { // Add model control
+  value: false,
+  label: "Mobile Mode",
+  onChange: (value) => setMrmode(value),
+}})
+
+const getResponsiveStyles = () => {
+  let styles = {
+    position: "absolute",
+    zIndex: 10,
+    borderRadius: "38px",
+    height: "81.5vh",
+    // top: "46.5%",
+    left: "50%",
+    // margintop:"20%",
+    transform: "translate(-60%, 12%)",
+  };
+
+  switch (true) {
+    case window.innerHeight < 400:
+      styles.width = "148px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight < 410:
+      styles.width = "150px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight < 440:
+      styles.width = "158px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight < 460:
+      styles.width = "167px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 479:
+      styles.width = "175px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 510:
+      styles.width = "186px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 556:
+      styles.width = "206px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 605:
+      styles.width = "237px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 658:
+      styles.width = "255px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 705:
+      styles.width = "265px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 750:
+      styles.width = "287px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight <= 785:
+      styles.width = "295px";
+     // styles.borderRadius = "47px";
+      break;
+    case window.innerHeight < 800:
+      styles.width = "297px";
+     // styles.borderRadius = "44px";
+      break;
+    case window.innerHeight < 828:
+      styles.width = "311px";
+     // styles.borderRadius = "47px";
+      break;
+    case window.innerHeight < 875:
+      styles.width = "330px";
+     // styles.borderRadius = "47px";
+      break;
+    case window.innerHeight < 907:
+      styles.width = "354px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight < 966:
+      styles.width = "363px";
+    //  styles.position= "absolute";
+    //  styles.margintop= "10";
+      //  styles.zIndex= 10;
+      //  styles.borderRadius= "38px";
+      //  styles.height= "81.5vh";
+      //  styles.top= "46.5%";
+      //  styles.left= "50%";
+      //  styles.margintop= "20%"
+      //  styles.transform= "translate(-50%, -50%)";
+     // styles.borderRadius = "49px";
+      break;
+    case window.innerHeight < 1015:
+      styles.width = "384px";
+     // styles.borderRadius = "62px";
+      break;
+    case window.innerHeight < 1050:
+      styles.width = "398px";
+     // styles.borderRadius = "68px";
+      break;
+    case window.innerHeight < 1085:
+      styles.width = "400px";
+     // styles.borderRadius = "61px";
+      break;
+    default:
+      styles.width = "427px";
+     // styles.borderRadius = "80px";  // Fallback for other cases
+      break;
+  }
+
+  // Optionally, you can include width-based responsiveness here as well, as per your initial code
+  // if (window.innerWidth < 500) {
+  //   styles.width = "348.2px";
+  // } else if (window.innerWidth < 768) {
+  //   styles.width = "15.5%";
+  // } else if (window.innerWidth < 1200) {
+  //   styles.width = "357px";
+  // } else {
+  //   styles.width = "357px";
+  // }
+
+  return styles;
+};
+
+const [responsiveStyles, setResponsiveStyles] = useState(getResponsiveStyles());
+
+useEffect(() => {
+  const handleResize = () => {
+    setResponsiveStyles(getResponsiveStyles());
+  };
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
+
   return (
     <div>
+      <Suspense fallback={<Loader/>}>
+
      
         <div>
-          <Canvas gl={{ outputEncoding: THREE.sRGBEncoding }} camera={{ position: [-1.1, 0, 2], fov: 10 }} style={{ height: '100vh' }}>
-            <Suspense fallback={""}>
+<Leva/>
+      
+          <Canvas gl={{ outputEncoding: THREE.sRGBEncoding }} camera={{ position: [-1.1, 0, 2], fov: 10 }} style={mrmode ?{ height: '100vh' } : responsiveStyles}>
 
             <OrbitControls 
             // Consider enabling these if you need them
@@ -51,15 +200,15 @@ const TaskFour = () => {
             minDistance={2}
             minPolarAngle={Math.PI / 2}  // Limit vertical rotation to a fixed angle
             maxPolarAngle={Math.PI / 2}    // Vertical rotation limit (keeping it as is)
-            minAzimuthAngle={-0.0760}  // -5 degrees in radians
+            minAzimuthAngle={-0.0805}  // -5 degrees in radians
             maxAzimuthAngle={0.009} 
             />
             <Environment preset='night' />
             <BallObject /> 
-            </Suspense>
+   
           </Canvas>
         </div>
-      
+        </Suspense>
     </div>
   );
 };

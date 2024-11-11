@@ -1,6 +1,7 @@
 import { Environment, OrbitControls, RandomizedLight } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
+import Loader from './TaskSix/Loader'
 
 const CombinedController = ({ mode }) => {
     const { camera } = useThree()
@@ -93,12 +94,14 @@ const TaskThree = () => {
                     top: '20px',
                     left: '20px',
                     padding: '10px',
-                    zIndex: 1,
+                    zIndex: 100,
                     backgroundColor: "lightgray",
                 }}
             >
                 Switch to {mode === 'camera' ? 'Object' : 'Camera'} Control
             </button>
+            <Suspense fallback={<Loader/>}>
+                
             <Canvas style={{ width: '100%', height: '100%' }}
                 camera={{ position: [2, 2, 2], fov: 75 }}
                 shadows>
@@ -114,6 +117,7 @@ const TaskThree = () => {
                     <shadowMaterial opacity={0.5} />
                 </mesh>
             </Canvas>
+                    </Suspense>
         </div>
     )
 }

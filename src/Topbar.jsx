@@ -1,55 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {motion} from "framer-motion"
 
 const Topbar = () => {
   return (
-    <div className='flex justify-between  absolute z-50 top-4  left-1/3 max-sm:left-1.5'>
-    
-      <nav>
-        <button  className="relative overflow-hidden rounded-lg space-x-3 max-sm:rounded-none mx-3  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
+ <nav className='absolute z-30 flex py-6 px-3  gap-4 flex-col h-screen justify-end'>
+<Link className='text-6xl text-white' to="/"><motion.div initial={{opacity:0 , x:-100}} animate={{opacity:1,x:0 ,transition:{delay:0.4,ease:'easeInOut'}}} >TaskOne</motion.div>  </Link>
+<Link className='text-6xl text-white' to="/box2"> <motion.div initial={{opacity:0 , x:-100}} animate={{opacity:1,x:0 ,transition:{delay:0.5,ease:'easeInOut'}}} >TaskTwo</motion.div>  </Link>
+<Link className='text-6xl text-white' to="/box3"><motion.div initial={{opacity:0 , x:-100}} animate={{opacity:1,x:0 ,transition:{delay:0.6,ease:'easeInOut'}}} >TaskThree</motion.div>  </Link>
 
-          <Link to="/">one</Link>
-          </span>
-        </button>
-        {/* <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
-
-          <Link to="/box2">Two</Link>
-          </span>
-        </button> */}
-        <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 mx-3 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
-
-          <Link to="/box3">Three</Link>
-          </span>
-        </button>
-        <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 mx-3 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
-
-          <Link to="/box4">Four</Link>
-          </span>
-        </button>
-        <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 mx-3 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
-
-          <Link to="/box5">Five</Link>
-          </span>
-        </button>
-        <button  className="relative overflow-hidden rounded-lg max-sm:rounded-none  h-12 max-sm:h-5 group hover:shadow-lg hover:scale-105 mx-3 transition duration-500 before:absolute  before:inset-0 before:rounded-lg before:bg-gradient-to-br before:from-pink-400 before:via-purple-400 before:to-indigo-400">
-          <span  className="relative flex items-center text-white font-bold
-     max-sm:font-light max-sm:text-sm px-4 max-sm:px-1 py-2 max-sm:py-0">
-
-          <Link to="/box6">Six</Link>
-          </span>
-        </button>
-      </nav>
-    </div>
+ </nav>
   );
 };
 

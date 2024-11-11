@@ -7,7 +7,7 @@ import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
 import { MeshStandardMaterial } from 'three';
-export function Sphere({ text, heading,rotateX,rotateY, createTextTexture, headingColor,mobile, color, textColor, buttonColor, ...props }) {
+export function Sphere({ text, heading,rotateX,rotateY, createTextTexture, headingColor,mobile, color="orange", textColor, buttonColor, ...props }) {
 
   const { nodes, materials } = useGLTF('/models/sphere.glb')
   const texture = createTextTexture(text,rotateX,rotateY, heading, 'Button Text', headingColor,color, textColor, buttonColor);
