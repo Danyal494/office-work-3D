@@ -8,13 +8,8 @@ quantum.register()
 
 const Loader = () => {
   return (
-    <div className="gk  ">
-      <div>
-        {/* <TiVendorApple className="mx-auto" size={"5em"} color="white" /> */}
-
-
-      
-
+    <div className=" h-screen flex justify-center items-center ">
+    
 
 // Default values shown
 <l-quantum
@@ -25,7 +20,6 @@ const Loader = () => {
 
         
       </div>
-    </div>
   );
 };
 
