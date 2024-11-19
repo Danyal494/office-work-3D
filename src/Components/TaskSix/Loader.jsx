@@ -9,9 +9,6 @@ quantum.register()
 const Loader = () => {
   return (
     <div className=" h-screen flex justify-center items-center ">
-    
-
-// Default values shown
 <l-quantum
   size="90"
   speed="1.75" 
