@@ -1,0 +1,310 @@
+style
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.back{
+  background-image: url(/public/bg1.jpeg);
+  width: 89.5%;
+  height: 83vh;
+  border-radius: 147px;
+  z-index: 20;
+  position: absolute;
+  top: 46.5%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+@media (max-height: 2050px) {
+  .back {
+    width: 452px; /* Same size across large screens */
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 1130px) {
+  .back {
+    width: 446px; /* Same size across large screens */
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 1115px) {
+  .back {
+    width: 440px; /* Same size across large screens */
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 1100px) {
+  .back {
+    width: 435px; /* Same size across large screens */
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 1085px) {
+  .back {
+    width: 418px; /* Same size across large screens */
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 1050px) {
+  .back {
+    width: 410px; /* Same size across large screens */
+    height: 83vh;
+  }
+}
+@media (max-height: 1015px) {
+  .back {
+    width: 400px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 1030px) {
+  .back {
+    width: 407px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 990px) {
+  .back {
+    width: 385px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 966px) {
+  .back {
+    width: 370px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 930px) {
+  .back {
+    width: 365px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 907px) {
+  .back {
+    width: 358px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 875px) {
+  .back {
+    width: 343px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 849px) {
+  .back {
+    width: 337px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 828px) {
+  .back {
+    width: 328px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 800px) {
+  .back {
+    width: 318px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 785px) {
+  .back {
+    width: 310px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 750px) {
+  .back {
+    width: 292px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 720px) {
+  .back {
+    width: 285px;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+@media (max-height: 705px) {
+  .back {
+    width: 280px;
+    height: 83vh;
+    border-radius: 40px;
+  }
+}
+@media (max-height: 685px) {
+  .back {
+    width: 283px;
+    height: 83vh;
+    border-radius: 40px;
+  }
+}
+@media (max-height: 658px) {
+  .back {
+    width: 260px;
+    height: 83vh;
+    border-radius: 39px;
+  }
+}
+@media (max-height: 638px) {
+  .back {
+    width: 250px;
+    height: 83vh;
+    border-radius: 39px;
+  }
+}
+@media (max-height: 605px) {
+  .back {
+    width: 243px;
+    height: 83vh;
+    border-radius: 32px;
+  }
+}
+@media (max-height: 585px) {
+  .back {
+    width: 232px;
+    height: 83vh;
+    border-radius: 32px;
+  }
+}
+@media (max-height: 556px) {
+  .back {
+    width: 222px;
+    height: 83vh;
+    border-radius: 32px;
+  }
+}
+@media (max-height: 525px) {
+  .back {
+    width: 204px;
+    height: 83vh;
+    border-radius: 32px;
+  }
+}
+@media (max-height: 510px) {
+  .back {
+    width: 194px;
+    height: 83vh;
+    border-radius: 34px;
+  }
+}
+@media (max-height: 479px) {
+  .back {
+    width: 190px;
+    height: 83vh;
+    border-radius: 29px;
+  }
+}
+@media (max-height: 460px) {
+  .back {
+    width: 182px;
+    height: 83vh;
+    border-radius: 29px;
+  }
+}
+@media (max-height: 440px) {
+  .back {
+    width: 170px;
+    height: 83vh;
+    border-radius: 29px;
+  }
+}
+@media (max-height: 410px) {
+  .back {
+    width: 160px;
+    height: 83vh;
+    border-radius: 29px;
+  }
+}
+@media (max-height: 400px) {
+  .back {
+    width: 157px;
+    height: 83vh;
+    border-radius: 33px;
+  }
+}
+
+.gk{
+  position: absolute;
+  z-index: 20;
+  border-radius: 38px;
+ top: 46.5%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 19%;
+height: 83vh;
+/* background: black; */
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+@media (max-height: 805px) {
+  .gk {
+    width: 85%;
+    height: 83vh;
+    border-radius: 49px;
+  }
+}
+
+
+/* @media (max-height: 875px) {
+  .back {
+    width: 17%;
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 912px) {
+  .back {
+    width: 17.5%;
+    height: 83vh;
+    border-radius: 59px;
+  }
+}
+@media (max-height: 962px) {
+  .back {
+    width: 17.5%;
+    height: 83vh;
+    border-radius: 59px;
+  }
+} */
+
+
+
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/SFPRODISPLAYREGULAR.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+App.jsx
+
+ <div className='bg-[#42A5F5]' style={{ position: "relative", height: "100vh", width: "100vw" }}>
+      {open ? <Btn endLoading={handleBtn}/> : <NewSphere style={{ position: "absolute", top: 20, left: 0, zIndex: 10 }}/> }
+     
+      <ITask style={{ position: "absolute", top: 0, left: 0, zIndex: 5 }}/>
+    </div>
