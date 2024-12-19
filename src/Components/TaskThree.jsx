@@ -73,7 +73,7 @@ const CombinedController = ({ mode }) => {
     return (
         <mesh ref={meshRef} position={[0, 0.7, 0]} castShadow>
             <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial metalness={1} roughness={0} color="orange" />
+            <meshStandardMaterial metalness={0.3} roughness={0.3} color="orange" />
         </mesh>
     )
 }
